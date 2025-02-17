@@ -20,7 +20,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
 
-        // slider to control horizontal rotation
+        // slider to control horizontal rotationd
         JSlider headingSlider = new JSlider(0, 360, 180);
         pane.add(headingSlider, BorderLayout.SOUTH);
 
