@@ -1,4 +1,5 @@
 # 3D Shape Renderer
+![Untitled](https://github.com/user-attachments/assets/4764bc93-a054-40da-b206-6f4f2646d901)
 
 This project is a Java application that allows visualization and interaction with different 3D shapes made up of rectangles and triangles in a graphical environment. It uses the Swing library for the user interface and applies matrix transformations to rotate the figures in a three-dimensional space.
 
