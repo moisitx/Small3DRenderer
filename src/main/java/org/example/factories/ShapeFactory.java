@@ -1,4 +1,9 @@
-package org.example;
+package org.example.factories;
+
+import org.example.shapes.IShape;
+import org.example.shapes.Rectangle;
+import org.example.shapes.Triangle;
+import org.example.utils.Vertex;
 
 import java.util.ArrayList;
 

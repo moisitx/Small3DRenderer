@@ -1,4 +1,6 @@
-package org.example;
+package org.example.render;
+
+import org.example.utils.Vertex;
 
 import java.awt.*;
 
@@ -6,7 +8,7 @@ public class Shader {
 
     public static Color getShade(Vertex v, Color color) {
         Vertex unitary = Vertex.unitaryVector(v);
-        double angleCos = Math.abs(unitary.z);
+        double angleCos = Math.abs(unitary.getZ());
 
         double redLinear = Math.pow(color.getRed(), 2.4) * angleCos;
         double greenLinear = Math.pow(color.getGreen(), 2.4) * angleCos;

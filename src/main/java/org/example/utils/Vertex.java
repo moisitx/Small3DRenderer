@@ -1,12 +1,24 @@
-package org.example;
+package org.example.utils;
 
 public class Vertex {
-    double x, y, z;
+    private double x, y, z;
 
-    Vertex(double x, double y, double z) {
+    public Vertex(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getX() {
+        return x;
     }
 
     public static Vertex normalVector(Vertex common, Vertex v2, Vertex v3) {

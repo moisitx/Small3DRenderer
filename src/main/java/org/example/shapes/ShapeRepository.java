@@ -1,4 +1,6 @@
-package org.example;
+package org.example.shapes;
+
+import org.example.utils.Vertex;
 
 import java.awt.Color;
 import java.util.ArrayList;

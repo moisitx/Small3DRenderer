@@ -1,4 +1,6 @@
-package org.example;
+package org.example.render;
+
+import org.example.shapes.IShape;
 
 import java.awt.*;
 

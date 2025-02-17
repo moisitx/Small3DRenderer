@@ -1,5 +1,12 @@
 package org.example;
 
+import org.example.factories.RendererFactory;
+import org.example.factories.ShapeFactory;
+import org.example.shapes.IShape;
+import org.example.shapes.ShapeRepository;
+import org.example.utils.Matrix;
+import org.example.utils.Vertex;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

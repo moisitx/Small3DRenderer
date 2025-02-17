@@ -1,4 +1,7 @@
-package org.example;
+package org.example.render;
+
+import org.example.utils.Vertex;
+import org.example.shapes.IShape;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
@@ -17,9 +20,9 @@ public class TriangleRenderer implements IRenderer {
 
         Vertex unitary = Vertex.unitaryVector(Vertex.normalVector(vertices.get(0), vertices.get(1), vertices.get(2)));
 
-        path.moveTo(vertices.get(0).x, vertices.get(0).y);
-        path.lineTo(vertices.get(1).x, vertices.get(1).y);
-        path.lineTo(vertices.get(2).x, vertices.get(2).y);
+        path.moveTo(vertices.get(0).getX(), vertices.get(0).getY());
+        path.lineTo(vertices.get(1).getX(), vertices.get(1).getY());
+        path.lineTo(vertices.get(2).getX(), vertices.get(2).getY());
         path.closePath();
         g2.setColor(Shader.getShade(unitary, shape.getColor()));
         g2.fill(path);

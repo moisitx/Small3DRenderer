@@ -1,4 +1,11 @@
-package org.example;
+package org.example.factories;
+
+import org.example.render.IRenderer;
+import org.example.render.RectangleRenderer;
+import org.example.render.TriangleRenderer;
+import org.example.shapes.IShape;
+import org.example.shapes.Rectangle;
+import org.example.shapes.Triangle;
 
 public class RendererFactory {
     public static IRenderer getRenderer(IShape shape) {
