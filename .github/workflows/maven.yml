@@ -19,23 +19,9 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
 
-    - name: Create a shorter working directory
-      run: mkdir C:\build
-
-    - name: Copy repository to shorter directory
-      run: xcopy /E /I . C:\build\Small3DRenderer
-
-    - name: Build with Maven
-      working-directory: C:\build\Small3DRenderer
-      run: mvn -B package --file pom.xml
-
-    - name: List target directory (for debugging)
-      working-directory: C:\build\Small3DRenderer
-      run: dir target
-
     - name: Verify if jar file exists
       run: |
-        if (-Not (Test-Path -Path C:\build\Small3DRenderer\target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
+        if (-Not (Test-Path -Path C:\target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
           Write-Host "Jar file not found!"
           exit 1
         }
@@ -54,7 +40,7 @@ jobs:
         <launch4jConfig>
           <dontWrapJar>false</dontWrapJar>
           <headerType>gui</headerType>
-          <jar>C:\build\Small3DRenderer\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <jar>C:\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
           <outfile>C:\output\Small3DRenderer.exe</outfile>
           <errTitle>You have to download the latest Java Version</errTitle>
           <cmdLine></cmdLine>
@@ -90,7 +76,7 @@ jobs:
             <trademarks></trademarks>
             <language>ENGLISH_US</language>
           </versionInfo>
-        </launch4jConfig>' > C:\build\Small3DRenderer\launch4j.xml
+        </launch4jConfig>' > C:\launch4j.xml
 
     - name: Ensure output directory exists
       run: |
@@ -100,7 +86,7 @@ jobs:
 
     - name: Run Launch4J
       run: |
-        .\launch4j\launch4j.exe C:\build\Small3DRenderer\launch4j.xml
+        .\launch4j\launch4j.exe C:\launch4j.xml
 
     - name: List output directory after Launch4J
       run: dir C:\output
