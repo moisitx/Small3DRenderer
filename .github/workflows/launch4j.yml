@@ -63,7 +63,7 @@ jobs:
           <stayAlive>false</stayAlive>
           <restartOnCrash>true</restartOnCrash>
           <manifest></manifest>
-          <icon></icon>
+          <icon>assets/icon.ico</icon>
           <classPath>
             <mainClass>org.example.Main</mainClass>
           </classPath>
