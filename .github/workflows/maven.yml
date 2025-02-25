@@ -35,7 +35,7 @@ jobs:
 
     - name: Download Launch4J
       run: |
-        Invoke-WebRequest -Uri "https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-win32.zip" -OutFile "launch4j-3.50-win32.zip"
+        curl -L -o launch4j-3.50-win32.zip "https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-win32.zip"
         Expand-Archive -Path launch4j-3.50-win32.zip -DestinationPath . 
 
     - name: Configure Launch4J
