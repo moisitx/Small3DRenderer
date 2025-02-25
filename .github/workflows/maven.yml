@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Usar Windows para la generación de .exe
+    runs-on: windows-latest  # Use Windows for .exe generation
 
     steps:
     - uses: actions/checkout@v4
@@ -20,6 +20,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven
+      working-directory: .
       run: mvn -B package --file pom.xml
 
     - name: List target directory (for debugging)
@@ -46,7 +47,7 @@ jobs:
         <launch4jConfig>
           <dontWrapJar>false</dontWrapJar>
           <headerType>gui</headerType>
-          <jar>target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <jar>${{ github.workspace }}\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
           <outfile>C:\output\Small3DRenderer.exe</outfile>
           <errTitle>You have to download the latest Java Version</errTitle>
           <cmdLine></cmdLine>
@@ -90,9 +91,6 @@ jobs:
           New-Item -ItemType Directory -Force -Path C:\output
         }
 
-    - name: List files in the repository (for debugging)
-      run: dir
-
     - name: Run Launch4J
       run: |
         .\launch4j\launch4j.exe launch4j.xml
@@ -104,4 +102,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Small3DRenderer-App
-        path: C:\output\
+        path: C:\output\Small3DRenderer.exe
