@@ -1,4 +1,4 @@
-name: Java CI with jpackage
+name: Java CI with jpackage and Launch4J
 
 on:
   push:
@@ -39,13 +39,69 @@ jobs:
     - name: Create app image with jpackage
       working-directory: C:\build\Small3DRenderer
       run: |
-        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type exe --dest C:\output
+        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type app-image --dest C:\output
 
     - name: List output directory (for debugging)
-      run: dir C:\output
+      run: dir C:\output\Small3DRenderer
 
-    - name: Upload full application package as artifact
+    - name: Download Launch4J
+      run: |
+        Invoke-WebRequest -Uri "https://sourceforge.net/projects/launch4j/files/launch4j-3/3.14/launch4j-3.14-win32.zip/download" -OutFile launch4j.zip
+        Expand-Archive -Path launch4j.zip -DestinationPath launch4j
+
+    - name: Configure Launch4J
+      run: |
+        $launch4jConfig = @"
+        <?xml version="1.0" encoding="UTF-8"?>
+        <launch4jConfig>
+          <dontWrapJar>false</dontWrapJar>
+          <headerType>gui</headerType>
+          <jar>C:\output\Small3DRenderer\app\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <outfile>C:\output\Small3DRenderer.exe</outfile>
+          <errTitle>You have to download the latest Java Version</errTitle>
+          <cmdLine></cmdLine>
+          <chdir>.</chdir>
+          <priority>normal</priority>
+          <downloadUrl>https://www.oracle.com/java/technologies/javase/jdk23-archive-downloads.html</downloadUrl>
+          <supportUrl>https://github.com/moisitx/Small3DRenderer/blob/master/README.md</supportUrl>
+          <stayAlive>false</stayAlive>
+          <restartOnCrash>true</restartOnCrash>
+          <manifest></manifest>
+          <icon>C:\output\Small3DRenderer\app\Screenshot_1.ico</icon>
+          <classPath>
+            <mainClass>org.example.Main</mainClass>
+          </classPath>
+          <jre>
+            <path>C:\output\Small3DRenderer\runtime</path>
+            <requiresJdk>true</requiresJdk>
+            <requires64Bit>false</requires64Bit>
+            <minVersion>23.0.1</minVersion>
+            <maxVersion></maxVersion>
+          </jre>
+          <versionInfo>
+            <fileVersion>1.0.0.0</fileVersion>
+            <txtFileVersion>1.0 (Initial Release)</txtFileVersion>
+            <fileDescription>3D Shape Renderer and Visualizer</fileDescription>
+            <copyright>Copyright (c) 2025 Moises Fernandez Fernandez</copyright>
+            <productVersion>1.0.0.0</productVersion>
+            <txtProductVersion>1.0 (Initial Release)</txtProductVersion>
+            <productName>Small 3D Renderer</productName>
+            <companyName></companyName>
+            <internalName>Small3DRenderer</internalName>
+            <originalFilename>Small3DRenderer.exe</originalFilename>
+            <trademarks></trademarks>
+            <language>ENGLISH_US</language>
+          </versionInfo>
+        </launch4jConfig>
+        "@
+        Set-Content -Path launch4j-config.xml -Value $launch4jConfig
+
+    - name: Run Launch4J to create standalone .exe
+      run: |
+        .\launch4j\launch4j.exe launch4j-config.xml
+
+    - name: Upload standalone .exe as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Small3DRenderer-App
-        path: C:\output\*.exe
+        name: Small3DRenderer-Standalone
+        path: C:\output\Small3DRenderer.exe
