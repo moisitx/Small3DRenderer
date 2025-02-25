@@ -36,14 +36,14 @@ jobs:
     - name: Ensure output directory exists
       run: mkdir C:\output
 
-    # Download Launch4J (version 3.50) from SourceForge as a zip file
+    # Download Launch4J (version 3.50) using wget
     - name: Download Launch4J
       run: |
-        curl -L -o launch4j.zip https://github.com/launch4j/launch4j/releases/download/3.50/launch4j-3.50-win64.zip
+        wget https://github.com/launch4j/launch4j/releases/download/3.50/launch4j-3.50-win64.zip -O C:\launch4j.zip
         # Unzip the downloaded file
-        powershell -Command "Expand-Archive -Path launch4j.zip -DestinationPath C:\launch4j"
+        powershell -Command "Expand-Archive -Path C:\launch4j.zip -DestinationPath C:\launch4j"
         # Clean up the zip file after extracting
-        Remove-Item -Path C:\build\launch4j.zip
+        Remove-Item -Path C:\launch4j.zip
 
     # Verify Launch4J directory (for debugging)
     - name: Verify Launch4J installation
