@@ -19,18 +19,27 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
 
+    - name: Create a shorter working directory
+      run: mkdir C:\build
+
+    - name: Copy repository to shorter directory
+      run: xcopy /E /I . C:\build\Small3DRenderer
+
     - name: Build with Maven
+      working-directory: C:\build\Small3DRenderer
       run: mvn -B package --file pom.xml
 
     - name: List target directory (for debugging)
+      working-directory: C:\build\Small3DRenderer
       run: dir target
 
     - name: Create .exe with jpackage
+      working-directory: C:\build\Small3DRenderer
       run: |
-        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type app-image --dest target/dist
+        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type app-image --dest C:\output
 
     - name: Upload .exe as artifact
       uses: actions/upload-artifact@v4
       with:
         name: Small3DRenderer
-        path: target/dist/Small3DRenderer.exe
+        path: C:\output\Small3DRenderer.exe
