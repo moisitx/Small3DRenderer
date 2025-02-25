@@ -37,7 +37,7 @@ jobs:
       working-directory: C:\build\Small3DRenderer
       run: |
         jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type exe --dest C:\output
-   
+
     - name: List output directory (for debugging)
       run: dir C:\output
 
