@@ -1,4 +1,4 @@
-name: Java CI with Launch4J
+name: Java CI with Multi-Platform Support
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest  # Use Windows for .exe generation
 
     steps:
@@ -19,81 +19,107 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
 
-    - name: Create a shorter working directory
-      run: mkdir C:\build
-
-    - name: Copy repository to shorter directory
-      run: xcopy /E /I . C:\build\Small3DRenderer
-
     - name: Build with Maven
-      working-directory: C:\build\Small3DRenderer
       run: mvn -B package --file pom.xml
 
     - name: List target directory (for debugging)
-      working-directory: C:\build\Small3DRenderer
       run: dir target
 
-    - name: Ensure output directory exists
-      run: mkdir C:\output
-
-    # Download Launch4J (version 3.50)
-    - name: Download Launch4J
+    - name: Download Launch4J 3.50
       run: |
-        curl -L -o launch4j.zip https://github.com/launch4j/launch4j/releases/download/3.50/launch4j-3.50-win64.zip
-        tar -xf launch4j.zip -C C:\launch4j
+        curl -L -o launch4j.zip https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-win32.zip
 
-    # Create Launch4J configuration file
-    - name: Create Launch4J configuration file
+    - name: Extract Launch4J
       run: |
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > C:\build\Small3DRenderer\launch4j-config.xml
-        echo "<launch4jConfig>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <dontWrapJar>false</dontWrapJar>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <headerType>gui</headerType>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <jar>C:/output/Small3DRenderer/app/Small3DRenderer-1.0-SNAPSHOT.jar</jar>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <outfile>C:/output/Small3DRenderer.exe</outfile>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <errTitle>You have to download the latest Java Version</errTitle>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <cmdLine></cmdLine>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <chdir>.</chdir>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <priority>normal</priority>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <downloadUrl>https://www.oracle.com/java/technologies/javase/jdk23-archive-downloads.html</downloadUrl>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <supportUrl>https://github.com/moisitx/Small3DRenderer/blob/master/README.md</supportUrl>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <stayAlive>false</stayAlive>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <restartOnCrash>true</restartOnCrash>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <icon>C:/output/Small3DRenderer/app/Screenshot_1.ico</icon>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <classPath>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <mainClass>org.example.Main</mainClass>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  </classPath>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <jre>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <path>C:/output/Small3DRenderer/runtime</path>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <requiresJdk>true</requiresJdk>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <requires64Bit>false</requires64Bit>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <minVersion>23.0.1</minVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <maxVersion></maxVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  </jre>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  <versionInfo>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <fileVersion>1.0.0.0</fileVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <txtFileVersion>1.0 (Initial Release)</txtFileVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <fileDescription>3D Shape Renderer and Visualizer</fileDescription>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <copyright>Copyright (c) 2025 Moises Fernandez Fernandez</copyright>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <productVersion>1.0.0.0</productVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <txtProductVersion>1.0 (Initial Release)</txtProductVersion>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <productName>Small 3D Renderer</productName>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <internalName>Small3DRenderer</internalName>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <originalFilename>Small3DRenderer.exe</originalFilename>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "    <language>ENGLISH_US</language>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "  </versionInfo>" >> C:\build\Small3DRenderer\launch4j-config.xml
-        echo "</launch4jConfig>" >> C:\build\Small3DRenderer\launch4j-config.xml
+        Expand-Archive -Path launch4j.zip -DestinationPath launch4j
 
-    # Run Launch4J to create the .exe
-    - name: Run Launch4J to create the .exe
+    - name: Configure Launch4J
       run: |
-        C:\launch4j\launch4j C:\build\Small3DRenderer\launch4j-config.xml
+        $launch4jConfig = @"
+        <?xml version="1.0" encoding="UTF-8"?>
+        <launch4jConfig>
+          <dontWrapJar>false</dontWrapJar>
+          <headerType>gui</headerType>
+          <jar>target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <outfile>C:\output\Small3DRenderer.exe</outfile>
+          <errTitle>You have to download the latest Java Version</errTitle>
+          <cmdLine></cmdLine>
+          <chdir>.</chdir>
+          <priority>normal</priority>
+          <downloadUrl>https://www.oracle.com/java/technologies/javase/jdk23-archive-downloads.html</downloadUrl>
+          <supportUrl>https://github.com/moisitx/Small3DRenderer/blob/master/README.md</supportUrl>
+          <stayAlive>false</stayAlive>
+          <restartOnCrash>true</restartOnCrash>
+          <manifest></manifest>
+          <icon>C:\output\Screenshot_1.ico</icon>
+          <classPath>
+            <mainClass>org.example.Main</mainClass>
+          </classPath>
+          <jre>
+            <path>%JAVA_HOME%</path>
+            <requiresJdk>true</requiresJdk>
+            <requires64Bit>false</requires64Bit>
+            <minVersion>23.0.1</minVersion>
+            <maxVersion></maxVersion>
+          </jre>
+          <versionInfo>
+            <fileVersion>1.0.0.0</fileVersion>
+            <txtFileVersion>1.0 (Initial Release)</txtFileVersion>
+            <fileDescription>3D Shape Renderer and Visualizer</fileDescription>
+            <copyright>Copyright (c) 2025 Moises Fernandez Fernandez</copyright>
+            <productVersion>1.0.0.0</productVersion>
+            <txtProductVersion>1.0 (Initial Release)</txtProductVersion>
+            <productName>Small 3D Renderer</productName>
+            <companyName></companyName>
+            <internalName>Small3DRenderer</internalName>
+            <originalFilename>Small3DRenderer.exe</originalFilename>
+            <trademarks></trademarks>
+            <language>ENGLISH_US</language>
+          </versionInfo>
+        </launch4jConfig>
+        "@
+        Set-Content -Path launch4j-config.xml -Value $launch4jConfig
 
-    - name: List output directory (for debugging)
-      run: dir C:\output
+    - name: Run Launch4J to create standalone .exe
+      run: |
+        .\launch4j\launch4j.exe launch4j-config.xml
 
-    - name: Upload full application package as artifact
+    - name: Upload standalone .exe as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Small3DRenderer-App
+        name: Small3DRenderer-Windows
         path: C:\output\Small3DRenderer.exe
+
+  build-linux:
+    runs-on: ubuntu-latest  # Use Ubuntu for Linux package generation
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 23
+      uses: actions/setup-java@v4
+      with:
+        java-version: '23'
+        distribution: 'temurin'
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: List target directory (for debugging)
+      run: ls -l target
+
+    - name: Create Linux package with jpackage
+      run: |
+        mkdir -p output
+        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type app-image --dest output
+
+    - name: Package the application image into a tarball
+      run: |
+        cd output
+        tar -czf Small3DRenderer-linux.tar.gz Small3DRenderer
+
+    - name: Upload Linux package as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Small3DRenderer-Linux
+        path: output/Small3DRenderer-linux.tar.gz
