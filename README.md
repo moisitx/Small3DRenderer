@@ -1,3 +1,4 @@
+[![Build and test of Java Project](https://github.com/moisitx/Small3DRenderer/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/moisitx/Small3DRenderer/actions/workflows/main.yml)
 
 # 3D Shape Renderer
 ![Untitled](https://github.com/user-attachments/assets/947d3df8-d2c3-4b54-a176-e9f45d46e682)
