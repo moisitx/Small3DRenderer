@@ -103,4 +103,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Small3DRenderer-App
-        path: C:\output\Small3DRenderer.exe
+        path: C:\output\
