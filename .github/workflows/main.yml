@@ -2,9 +2,9 @@ name: Build and test of Java Project
 
 on: 
   push:
-    branches: [ "master" ]  # Optionally, specify your branch name here
+    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]  # Optionally, specify your branch name here
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -19,19 +19,23 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 23
-          distribution: 'temurin'  # Specify the JDK distribution
+          distribution: 'temurin'
           cache: maven  # Cache dependencies to speed up the build process
 
       # Build the project with Maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
+      # Add a verification step to check if dependencies are properly resolved
+      - name: Verify dependencies
+        run: mvn dependency:tree
+
       # Optionally, upload the .jar file as an artifact
       - name: Upload JAR file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
-          name: Small3DRenderer  # Name of the artifact
-          path: target/*.jar    # Path to the generated JAR file
+          name: Small3DRenderer
+          path: target/*.jar
 
       # Optional: Update Maven dependency graph for Dependabot
       - name: Update dependency graph
