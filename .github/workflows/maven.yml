@@ -24,10 +24,10 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Download Launch4J
+    - name: Download Launch4J 3.50
       run: |
-        wget https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.14/launch4j-3.14-linux-x64.tgz
-        tar -xzf launch4j-3.14-linux-x64.tgz
+        wget https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-linux-x64.tgz
+        tar -xzf launch4j-3.50-linux-x64.tgz
 
     - name: Configure Launch4J
       run: |
@@ -52,6 +52,7 @@ jobs:
           </classPath>
           <jre>
             <path>%JAVA_HOME%;%PATH%</path>
+            <requiresJdk>true</requiresJdk>
             <requires64Bit>false</requires64Bit>
             <minVersion>23.0.1</minVersion>
             <maxVersion></maxVersion>
