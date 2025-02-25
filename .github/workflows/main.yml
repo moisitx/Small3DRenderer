@@ -32,7 +32,7 @@ jobs:
 
       # Optionally, upload the .jar file as an artifact
       - name: Upload JAR file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Small3DRenderer
           path: target/*.jar
