@@ -18,6 +18,10 @@ jobs:
       with:
         java-version: '23'
         distribution: 'temurin'
+        
+    - name: Build with Maven
+      working-directory: C:\
+      run: mvn -B package --file pom.xml
 
     - name: Verify if jar file exists
       run: |
