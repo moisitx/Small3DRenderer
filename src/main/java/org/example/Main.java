@@ -98,8 +98,8 @@ public class Main {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
 
-                rotAngleX += Math.atan(e.getX() - lastX)*0.04;
-                rotAngleY += Math.atan(e.getY() - lastY)*0.04;
+                rotAngleX += Math.atan(e.getX() - lastX)*0.01;
+                rotAngleY += Math.atan(e.getY() - lastY)*0.01;
 
                 lastX = e.getX();
                 lastY = e.getY();
