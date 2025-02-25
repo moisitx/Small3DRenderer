@@ -38,6 +38,9 @@ jobs:
         curl -L -o launch4j-3.50-win32.zip "https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-win32.zip"
         Expand-Archive -Path launch4j-3.50-win32.zip -DestinationPath . 
 
+    - name: List Launch4J directory (for debugging)
+      run: dir launch4j
+
     - name: Configure Launch4J
       run: |
         echo '<?xml version="1.0" encoding="UTF-8"?>
@@ -82,12 +85,23 @@ jobs:
           </versionInfo>
         </launch4jConfig>' > launch4j.xml
 
+    - name: Ensure output directory exists
+      run: |
+        if (-Not (Test-Path -Path C:\output)) {
+          New-Item -ItemType Directory -Force -Path C:\output
+        }
+        if (-Not (Test-Path -Path C:\output\Small3DRenderer)) {
+          New-Item -ItemType Directory -Force -Path C:\output\Small3DRenderer
+        }
+
     - name: Run Launch4J
       run: |
-        .\launch4j\launch4j launch4j.xml
+        .\launch4j\launch4j.exe launch4j.xml
 
     - name: List output directory (for debugging)
-      run: dir C:\output\Small3DRenderer
+      run: |
+        dir C:\output
+        dir C:\output\Small3DRenderer
 
     - name: Upload full application package as artifact
       uses: actions/upload-artifact@v4
