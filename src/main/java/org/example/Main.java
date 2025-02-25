@@ -9,11 +9,15 @@ import org.example.utils.Vertex;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Main {
     private static ArrayList<IShape> shapes = ShapeRepository.createCylinder(100);
+    private static double lastX, lastY, rotAngleX, rotAngleY = 0;
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("3D Shape renderer");
         Container pane = frame.getContentPane();
         pane.setLayout(new BorderLayout());
@@ -38,17 +42,17 @@ public class Main {
                 //Rotation matrix plane XZ
                 double heading = Math.toRadians(headingSlider.getValue());
                 Matrix rotationXZ = new Matrix(new double[] {
-                        Math.cos(heading), 0, -Math.sin(heading),
+                        Math.cos(heading+rotAngleX), 0, -Math.sin(heading+rotAngleX),
                         0, 1, 0,
-                        Math.sin(heading), 0, Math.cos(heading)
+                        Math.sin(heading+rotAngleX), 0, Math.cos(heading+rotAngleX)
                 });
 
                 //Rotation matrix plane YZ
                 double pitch = Math.toRadians(pitchSlider.getValue());
                 Matrix rotationYZ = new Matrix(new double[]{
                         1, 0, 0,
-                        0, Math.cos(pitch), Math.sin(pitch),
-                        0, -Math.sin(pitch), Math.cos(pitch)
+                        0, Math.cos(pitch+rotAngleY), Math.sin(pitch+rotAngleY),
+                        0, -Math.sin(pitch+rotAngleY), Math.cos(pitch+rotAngleY)
                 });
 
                 //Apply the transformation to the shapes, this happens everytime the slider is moved
@@ -77,6 +81,33 @@ public class Main {
 
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e -> renderPanel.repaint());
+
+        renderPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                lastY = e.getY();
+                lastX = e.getX();
+            }
+
+        });
+
+        renderPanel.addMouseMotionListener(new MouseAdapter() {
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+
+                rotAngleX += Math.atan(e.getX() - lastX)*0.04;
+                rotAngleY += Math.atan(e.getY() - lastY)*0.04;
+
+                lastX = e.getX();
+                lastY = e.getY();
+
+                renderPanel.repaint();
+            }
+
+        });
 
         // Buttons panel
         JPanel buttonPanel = new JPanel();
