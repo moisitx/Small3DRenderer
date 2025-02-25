@@ -52,7 +52,6 @@ jobs:
           </classPath>
           <jre>
             <path>%JAVA_HOME%;%PATH%</path>
-            <requiresJdk>true</requiresJdk>
             <requires64Bit>false</requires64Bit>
             <minVersion>23.0.1</minVersion>
             <maxVersion></maxVersion>
