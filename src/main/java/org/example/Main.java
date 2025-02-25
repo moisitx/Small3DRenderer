@@ -98,8 +98,9 @@ public class Main {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
 
-                rotAngleX += Math.atan(e.getX() - lastX)*0.01;
-                rotAngleY += Math.atan(e.getY() - lastY)*0.01;
+                rotAngleY += Math.atan(e.getY() - lastY) * 0.01;
+                double upVector = -Math.signum(Math.cos(rotAngleY));
+                rotAngleX += upVector * Math.atan(e.getX() - lastX) * 0.01;
 
                 lastX = e.getX();
                 lastY = e.getY();
@@ -108,6 +109,7 @@ public class Main {
             }
 
         });
+
 
         // Buttons panel
         JPanel buttonPanel = new JPanel();
