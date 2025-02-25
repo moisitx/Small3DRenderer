@@ -58,7 +58,7 @@ jobs:
           <stayAlive>false</stayAlive>
           <restartOnCrash>true</restartOnCrash>
           <manifest></manifest>
-          <icon>C:\output\Small3DRenderer\app\Screenshot_1.ico</icon>
+          <icon></icon>
           <classPath>
             <mainClass>org.example.Main</mainClass>
           </classPath>
@@ -90,9 +90,6 @@ jobs:
         if (-Not (Test-Path -Path C:\output)) {
           New-Item -ItemType Directory -Force -Path C:\output
         }
-        if (-Not (Test-Path -Path C:\output\Small3DRenderer)) {
-          New-Item -ItemType Directory -Force -Path C:\output\Small3DRenderer
-        }
 
     - name: Run Launch4J
       run: |
@@ -101,10 +98,9 @@ jobs:
     - name: List output directory (for debugging)
       run: |
         dir C:\output
-        dir C:\output\Small3DRenderer
 
     - name: Upload full application package as artifact
       uses: actions/upload-artifact@v4
       with:
         name: Small3DRenderer-App
-        path: C:\output\*.exe
+        path: C:\output\Small3DRenderer.exe
