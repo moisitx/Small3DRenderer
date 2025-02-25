@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Use Windows for .exe generation
+    runs-on: windows-latest  # Usar Windows para la generación de .exe
 
     steps:
     - uses: actions/checkout@v4
@@ -18,13 +18,16 @@ jobs:
       with:
         java-version: '23'
         distribution: 'temurin'
-        
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: List target directory (for debugging)
+      run: dir target
+
     - name: Verify if jar file exists
       run: |
-        if (-Not (Test-Path -Path C:\target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
+        if (-Not (Test-Path -Path target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
           Write-Host "Jar file not found!"
           exit 1
         }
@@ -79,7 +82,7 @@ jobs:
             <trademarks></trademarks>
             <language>ENGLISH_US</language>
           </versionInfo>
-        </launch4jConfig>' > C:\launch4j.xml
+        </launch4jConfig>' > launch4j.xml
 
     - name: Ensure output directory exists
       run: |
@@ -89,7 +92,7 @@ jobs:
 
     - name: Run Launch4J
       run: |
-        .\launch4j\launch4j.exe C:\launch4j.xml
+        .\launch4j\launch4j.exe launch4j.xml
 
     - name: List output directory after Launch4J
       run: dir C:\output
