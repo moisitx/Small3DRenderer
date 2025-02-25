@@ -42,7 +42,7 @@ jobs:
         jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type exe --dest C:\output
 
     - name: List output directory (for debugging)
-      run: dir C:\output\Small3DRenderer
+      run: dir C:\output
 
     - name: Upload full application package as artifact
       uses: actions/upload-artifact@v4
