@@ -34,7 +34,7 @@ jobs:
 
       # Upload the generated .exe file as an artifact
       - name: Upload the Small3DRenderer.exe
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
 
         with:
           name: Small3DRenderer
