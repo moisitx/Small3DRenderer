@@ -19,27 +19,35 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
 
+    - name: List current directory
+      run: dir
+
     - name: Build with Maven
-      working-directory: .
+      working-directory: C:\build\Small3DRenderer
       run: mvn -B package --file pom.xml
 
+    - name: List current directory
+      run: dir
+
     - name: List target directory (for debugging)
+      working-directory: C:\build\Small3DRenderer
       run: dir target
 
     - name: Verify if jar file exists
       run: |
-        if (-Not (Test-Path -Path target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
+        if (-Not (Test-Path -Path C:\build\Small3DRenderer\target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
           Write-Host "Jar file not found!"
           exit 1
         }
-
     - name: Download Launch4J
       run: |
         curl -L -o launch4j-3.50-win32.zip "https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-win32.zip"
         Expand-Archive -Path launch4j-3.50-win32.zip -DestinationPath . 
-
     - name: List Launch4J directory (for debugging)
       run: dir launch4j
+      
+    - name: List current directory
+      run: dir
 
     - name: Configure Launch4J
       run: |
@@ -47,7 +55,7 @@ jobs:
         <launch4jConfig>
           <dontWrapJar>false</dontWrapJar>
           <headerType>gui</headerType>
-          <jar>${{ github.workspace }}\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <jar>C:\build\Small3DRenderer\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
           <outfile>C:\output\Small3DRenderer.exe</outfile>
           <errTitle>You have to download the latest Java Version</errTitle>
           <cmdLine></cmdLine>
@@ -83,18 +91,19 @@ jobs:
             <trademarks></trademarks>
             <language>ENGLISH_US</language>
           </versionInfo>
-        </launch4jConfig>' > launch4j.xml
-
+        </launch4jConfig>' > C:\build\Small3DRenderer\launch4j.xml
     - name: Ensure output directory exists
       run: |
         if (-Not (Test-Path -Path C:\output)) {
           New-Item -ItemType Directory -Force -Path C:\output
         }
 
+    - name: List current directory
+      run: dir
+      
     - name: Run Launch4J
       run: |
-        .\launch4j\launch4j.exe launch4j.xml
-
+        .\launch4j\launch4j.exe C:\build\Small3DRenderer\launch4j.xml
     - name: List output directory after Launch4J
       run: dir C:\output
 
@@ -102,4 +111,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Small3DRenderer-App
-        path: C:\output\Small3DRenderer.exe
+        path: C:\output\
