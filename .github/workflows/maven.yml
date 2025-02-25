@@ -19,15 +19,15 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
 
-    - name: List current directory
-      run: dir
+    - name: Create a shorter working directory
+      run: mkdir C:\build
+
+    - name: Copy repository to shorter directory
+      run: xcopy /E /I . C:\build\Small3DRenderer
 
     - name: Build with Maven
       working-directory: C:\build\Small3DRenderer
       run: mvn -B package --file pom.xml
-
-    - name: List current directory
-      run: dir
 
     - name: List target directory (for debugging)
       working-directory: C:\build\Small3DRenderer
@@ -45,9 +45,6 @@ jobs:
         Expand-Archive -Path launch4j-3.50-win32.zip -DestinationPath . 
     - name: List Launch4J directory (for debugging)
       run: dir launch4j
-      
-    - name: List current directory
-      run: dir
 
     - name: Configure Launch4J
       run: |
@@ -97,10 +94,6 @@ jobs:
         if (-Not (Test-Path -Path C:\output)) {
           New-Item -ItemType Directory -Force -Path C:\output
         }
-
-    - name: List current directory
-      run: dir
-      
     - name: Run Launch4J
       run: |
         .\launch4j\launch4j.exe C:\build\Small3DRenderer\launch4j.xml
