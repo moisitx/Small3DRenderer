@@ -90,6 +90,9 @@ jobs:
           New-Item -ItemType Directory -Force -Path C:\output
         }
 
+    - name: List files in the repository (for debugging)
+      run: dir
+
     - name: Run Launch4J
       run: |
         .\launch4j\launch4j.exe launch4j.xml
