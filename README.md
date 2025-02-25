@@ -9,3 +9,6 @@ This project is a Java application that allows visualization and interaction wit
 - **Interactive rotation** of shapes using horizontal and vertical sliders.  
 - **Selection of different geometric shapes** for visualization.  
 - **Sorting objects by depth** for correct rendering.  
+
+## License
+This project is licensed under the [MIT License](LICENSE).
