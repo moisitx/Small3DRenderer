@@ -24,16 +24,8 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Create .exe with jpackage
-      shell: pwsh  # Use PowerShell explicitly
       run: |
-        jpackage @"
-        --name Small3DRenderer
-        --input target
-        --main-jar Small3DRenderer.jar
-        --main-class org.example.Main
-        --type app-image
-        --dest target/dist
-        "@
+        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer.jar --main-class org.example.Main --type app-image --dest target/dist
 
     - name: Upload .exe as artifact
       uses: actions/upload-artifact@v4
