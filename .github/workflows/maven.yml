@@ -43,6 +43,10 @@ jobs:
         # Unzip the downloaded file using the built-in Windows unzip command
         powershell -Command "Expand-Archive -Path launch4j.zip -DestinationPath C:\launch4j"
 
+    # Verify Launch4J directory structure (for debugging)
+    - name: Verify Launch4J directory structure
+      run: dir C:\launch4j
+
     # Create Launch4J configuration file
     - name: Create Launch4J configuration file
       run: |
@@ -88,7 +92,7 @@ jobs:
     # Run Launch4J to create the .exe
     - name: Run Launch4J to create the .exe
       run: |
-        C:\launch4j\launch4j C:\build\Small3DRenderer\launch4j-config.xml
+        C:\launch4j\bin\launch4j C:\build\Small3DRenderer\launch4j-config.xml
 
     - name: List output directory (for debugging)
       run: dir C:\output
