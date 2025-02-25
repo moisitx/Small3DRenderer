@@ -28,6 +28,7 @@ jobs:
       run: |
         wget https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.50/launch4j-3.50-linux-x64.tgz
         tar -xzf launch4j-3.50-linux-x64.tgz
+        chmod +x launch4j/launch4j  # Make the executable file executable
 
     - name: Configure Launch4J
       run: |
