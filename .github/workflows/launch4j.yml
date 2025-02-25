@@ -25,6 +25,10 @@ jobs:
     - name: Copy repository to shorter directory
       run: xcopy /E /I . C:\build\Small3DRenderer
 
+    - name: Copy icon to build directory
+      run: |
+        xcopy /I /Y resources/icon.ico C:\build\Small3DRenderer\icon.ico
+
     - name: Build with Maven
       working-directory: C:\build\Small3DRenderer
       run: mvn -B package --file pom.xml
@@ -63,7 +67,7 @@ jobs:
           <stayAlive>false</stayAlive>
           <restartOnCrash>true</restartOnCrash>
           <manifest></manifest>
-          <icon>assets/icon.ico</icon>
+          <icon>C:\build\Small3DRenderer\icon.ico</icon>
           <classPath>
             <mainClass>org.example.Main</mainClass>
           </classPath>
