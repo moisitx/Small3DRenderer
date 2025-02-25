@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # You can also use a Windows runner if needed
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
