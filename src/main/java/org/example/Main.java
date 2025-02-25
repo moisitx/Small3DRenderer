@@ -98,6 +98,16 @@ public class Main {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
 
+                //Initial approach to fix the rotation around the Y axis when inverted
+                /*rotAngleY += Math.atan(e.getY() - lastY) * 0.01;
+                if(Math.abs(rotAngleY) % (2*Math.PI) > Math.PI) {
+                    rotAngleX += Math.atan(e.getX() - lastX) * 0.01;
+                }else{
+                    rotAngleX -= Math.atan(e.getX() - lastX) * 0.01;
+                }*/
+
+
+                //This achieves the same but smoother due to being a continuous function
                 rotAngleY += Math.atan(e.getY() - lastY) * 0.01;
                 double upVector = -Math.signum(Math.cos(rotAngleY));
                 rotAngleX += upVector * Math.atan(e.getX() - lastX) * 0.01;
