@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest  # Use Windows for .exe generation
 
     steps:
@@ -23,9 +22,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: List target directory (for debugging)
+      run: dir target
+
     - name: Create .exe with jpackage
       run: |
-        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer.jar --main-class org.example.Main --type app-image --dest target/dist
+        jpackage --name Small3DRenderer --input target --main-jar Small3DRenderer-1.0-SNAPSHOT.jar --main-class org.example.Main --type app-image --dest target/dist
 
     - name: Upload .exe as artifact
       uses: actions/upload-artifact@v4
