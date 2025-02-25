@@ -20,12 +20,11 @@ jobs:
         distribution: 'temurin'
         
     - name: Build with Maven
-      working-directory: C:\
       run: mvn -B package --file pom.xml
 
     - name: Verify if jar file exists
       run: |
-        if (-Not (Test-Path -Path C:\target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
+        if (-Not (Test-Path -Path target\Small3DRenderer-1.0-SNAPSHOT.jar)) {
           Write-Host "Jar file not found!"
           exit 1
         }
@@ -44,8 +43,8 @@ jobs:
         <launch4jConfig>
           <dontWrapJar>false</dontWrapJar>
           <headerType>gui</headerType>
-          <jar>C:\target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
-          <outfile>C:\output\Small3DRenderer.exe</outfile>
+          <jar>target\Small3DRenderer-1.0-SNAPSHOT.jar</jar>
+          <outfile>output\Small3DRenderer.exe</outfile>
           <errTitle>You have to download the latest Java Version</errTitle>
           <cmdLine></cmdLine>
           <chdir>.</chdir>
@@ -80,7 +79,7 @@ jobs:
             <trademarks></trademarks>
             <language>ENGLISH_US</language>
           </versionInfo>
-        </launch4jConfig>' > C:\launch4j.xml
+        </launch4jConfig>' > launch4j.xml
 
     - name: Ensure output directory exists
       run: |
