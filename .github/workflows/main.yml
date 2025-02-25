@@ -11,9 +11,3 @@ jobs:
          java-version: 23
      - name: Build with Maven
        run: mvn -B package --file pom.xml
-
-     - name: Upload JAR file
-       uses: actions/upload-artifact@v3
-       with:
-         name: Small3DRenderer
-         path: target/*.jar
