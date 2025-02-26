@@ -5,16 +5,18 @@ import org.example.factories.ShapeFactory;
 import org.example.shapes.IShape;
 import org.example.shapes.ShapeRepository;
 import org.example.utils.Matrix;
+import org.example.utils.Utilities;
 import org.example.utils.Vertex;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Main {
-    private static ArrayList<IShape> shapes = ShapeRepository.createCylinder(100);
+    private static ArrayList<IShape> shapes = ShapeRepository.createTetrahedron();
     private static double lastX, lastY, rotAngleX, rotAngleY = 0;
     public static void main(String[] args) {
 
@@ -35,6 +37,7 @@ public class Main {
         // panel to display render results
         JPanel renderPanel = new JPanel() {
             public void paintComponent(Graphics g) {
+                BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setColor(Color.BLACK);
                 g2.fillRect(0, 0, getWidth(), getHeight());
@@ -55,7 +58,7 @@ public class Main {
                         0, -Math.sin(pitch+rotAngleY), Math.cos(pitch+rotAngleY)
                 });
 
-                //Apply the transformation to the shapes, this happens everytime the slider is moved
+                //Apply the transformation to the shapes, this happens everytime the slider or mouse are moved
                 ArrayList<IShape> transformedShapes = new ArrayList<>();
                 for (IShape shape : shapes) {
                     ArrayList<Vertex> transformedVertices = new ArrayList<>();
@@ -66,14 +69,14 @@ public class Main {
                 }
 
                 //Sort the transformed shapes by depth (Z) to ensure a correct rendering, further away objects should render first
-                ArrayList<IShape> sortedTetrahedron = sortByZ(transformedShapes);
+                ArrayList<IShape> sortedShapes = Utilities.getInstance().sortByZ(transformedShapes);
 
                 //A translation is applied to displace the shapes towards the origin so it can be centered
-                g2.translate(getWidth() / 2, getHeight() / 2);
+                Utilities.getInstance().translateShapes(sortedShapes, bufferedImage);
 
                 //Each shape is drawed
-                for (IShape shape : sortedTetrahedron) {
-                    RendererFactory.getRenderer(shape).render(g2, shape);
+                for (IShape shape : sortedShapes) {
+                    RendererFactory.getRenderer(shape).render(g2, shape, bufferedImage);
                 }
             }
         };
@@ -82,6 +85,7 @@ public class Main {
         headingSlider.addChangeListener(e -> renderPanel.repaint());
         pitchSlider.addChangeListener(e -> renderPanel.repaint());
 
+        //Gets the x and y coordinated of the mouse when clicking
         renderPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -92,6 +96,8 @@ public class Main {
 
         });
 
+
+        //Rotates the shape around whenever you are dragging the mouse
         renderPanel.addMouseMotionListener(new MouseAdapter() {
 
             @Override
@@ -105,7 +111,6 @@ public class Main {
                 }else{
                     rotAngleX -= Math.atan(e.getX() - lastX) * 0.01;
                 }*/
-
 
                 //This achieves the same but smoother due to being a continuous function
                 rotAngleY += Math.atan(e.getY() - lastY) * 0.01;
@@ -142,7 +147,7 @@ public class Main {
         prismButton.addActionListener(e -> updateShape(ShapeRepository.createTriangularPrism(), renderPanel));
 
         JButton cylinderButton = new JButton("Cylinder");
-        cylinderButton.addActionListener(e -> updateShape(ShapeRepository.createCylinder(100), renderPanel));
+        cylinderButton.addActionListener(e -> updateShape(ShapeRepository.createCylinder(20), renderPanel));
 
         // Add buttons to panel
         buttonPanel.add(tetrahedronButton);
@@ -157,25 +162,8 @@ public class Main {
         frame.setVisible(true);
     }
 
-    private static ArrayList<IShape> sortByZ(ArrayList<IShape> shapes) {
-        ArrayList<IShape> sorted = new ArrayList<>();
-        ArrayList<IShape> temp = shapes;
-        while (!shapes.isEmpty()) {
-            double max = temp.getFirst().getAverageZ();
-            int maxIndex = 0;
-            for (int i = 1; i < temp.size(); i++) {
-                double avgZ = temp.get(i).getAverageZ();
-                if (avgZ > max) {
-                    max = avgZ;
-                    maxIndex = i;
-                }
-            }
-            sorted.add(temp.get(maxIndex));
-            temp.remove(maxIndex);
-        }
-        return sorted;
-    }
 
+    //Updates the window when selecting other shapes
     private static void updateShape(ArrayList<IShape> newShapes, JPanel renderPanel) {
         shapes = newShapes;
         renderPanel.repaint();

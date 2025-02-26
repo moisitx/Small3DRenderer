@@ -1,7 +1,7 @@
 package org.example.utils;
 
 public class Vertex {
-    private final double x, y, z;
+    private double x, y, z;
 
     public Vertex(double x, double y, double z) {
         this.x = x;
@@ -20,6 +20,15 @@ public class Vertex {
     public double getZ() {
         return z;
     }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
 
     public Vertex subtract(Vertex v) {
         return new Vertex(this.x - v.x, this.y - v.y, this.z - v.z);
