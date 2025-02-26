@@ -7,7 +7,10 @@ This project is a Java application that allows visualization and interaction wit
 ## Features
 
 - **Rendering of 3D shapes** in a graphical window.  
-- **Interactive rotation** of shapes using horizontal and vertical sliders.  
+- **Interactive rotation** of shapes using horizontal and vertical sliders (And the mouse!!!!).  
 - **Selection of different geometric shapes** for visualization.  
 - **Sorting objects by depth** for correct rendering.  
 
+## Downloads
+
+- You can download this program to try it yourself in the releases section, that version is the one utilizing the Graphics2D library to fill the triangles and rectangles. I've recently added my own methods to fill them but its performance dropped significantly and the quality a little bit in shapes with a lot of polygons so I decided not to release this version, nonetheless, its availabe in the source code for those interested.
